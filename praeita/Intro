@@ -1,0 +1,124 @@
+import pandas
+import numpy
+
+# print('hello students')
+# print('students')
+
+# # Comment
+# """
+# lol
+# lol?
+# """
+
+
+# amzius = 5
+
+# print(amzius)
+# print(amzius)
+# print(amzius)
+
+# amzius = 60
+
+# print(amzius)
+
+# amzius = 28
+
+# print(amzius)
+# print('amzius')
+
+# gimimodiena = 22
+# print(gimimodiena)
+
+# vidurkis = 8.56
+# print(vidurkis)
+# vidurkis = 5
+
+# print(vidurkis)
+
+# vidurkis = 10
+# vidurkis_antras = 6
+
+# bendras_vidurkis = vidurkis ** vidurkis_antras
+# print(bendras_vidurkis)
+
+# skaicius1 = float('5.41')
+# skaicius2 = 3
+
+# suma = 0
+# suma = suma + skaicius1
+# suma *= skaicius2 # suma = suma + skaicius2
+
+# print(suma)
+
+# vardas = "Justas"
+# print("Labas mano vardas yra: " + vardas)
+
+# skaicius1 = "2"
+# skaicius2 = "4"
+# print(int(skaicius1) + int(skaicius2))
+
+# vardas = "Justas, Kvederis, Programuotojas"
+# pilnas_tekstas = "Labas mano vardas yra: xxx" + vardas
+# print(pilnas_tekstas)
+
+# print(vardas[::-1])
+
+
+
+# print(vardas.split(','))
+# vardas = vardas.replace('a','n')
+# print(vardas)
+# print(vardas.replace('a','n'))
+# vardas = "Bimbaluzas Bambalinis"
+# name_translation = "Adolfas"
+# pilnas_tekstas = f'Labas mano {name_translation} vardas yra: {vardas}'
+# print(pilnas_tekstas)
+
+
+# word = "Zodis"
+# skaicius = 7
+# print(word+str(skaicius))
+
+# print(skaicius+5)
+
+# print(f"{word}{skaicius}")
+
+# a = "justas "
+# b = 4
+# print(a*b)
+
+# vardas = input("Iveskite savo varda: ")
+# print(f"Labas mano vardas yra: {vardas}")
+
+# skaicius1 = int(input('Iveskite pirma skaiciu: '))
+
+# skaicius2 = int(input('Iveskite antra skaiciu: '))
+# print(f"Jusu suma yra: {skaicius1 + skaicius2}")
+
+
+# x = int(input('Iveskite skaiciu: '))
+
+# y = int(input('Iveskite skaiciu: '))
+
+# z = int(input('Iveskite skaiciu: '))
+
+# suma = (x + y) / z
+
+# print(f'Pirmi du skaiciai sudeti ir padalinti is skaiciaus {z} yra lygu: {suma}')
+
+# x1 = float(input('Iveskite keturkampio krastine: '))
+# x2 = float(input('Iveskite keturkampio kita krastine: '))
+
+# perimetras = (x1 + x2) * 2
+# plotas = x1 * x2
+
+# print(f'Perimetras {perimetras} ir plotas {plotas}')
+# ***************************
+
+
+c = float(input('Iveskite celsiju: '))
+
+f = (9 / 5) * c + 32
+
+print(f'celsijaus {c} faranheite yra {f}')
+

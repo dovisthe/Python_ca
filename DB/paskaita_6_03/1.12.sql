@@ -1,0 +1,3 @@
+UPDATE DARBUOTOJAS
+SET PAREIGOS = "chef of memes", SKYRIUS_PAVADINIMAS = "Testavimo"
+WHERE VARDAS = "Dovis" AND PAVARDE = "Eidikis"

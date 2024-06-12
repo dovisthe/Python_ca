@@ -1,0 +1,1 @@
+SELECT count(*) FROM DARBUOTOJAS WHERE PAREIGOS = "Testuotojas"

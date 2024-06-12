@@ -1,0 +1,1 @@
+SELECT MAX(PROJEKTAS_ID) as maksimalus_skaicius FROM DARBUOTOJAS
