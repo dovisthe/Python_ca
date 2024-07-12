@@ -8,7 +8,17 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.metrics import classification_report, accuracy_score, mean_squared_error, r2_score, make_scorer
 from sklearn.metrics import confusion_matrix
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import cross_val_score
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.metrics import mean_squared_error, make_scorer, mean_squared_error as mse
+from sklearn.metrics import root_mean_squared_error
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score, mean_squared_error as mse
+from sklearn.metrics import mean_squared_error as rmse
+
+
 
 # svc -svr
 
@@ -102,12 +112,18 @@ lowerFilter = (dt['LotArea'] <= Q1 - 1.5 *IQR)
 dt.loc[upperFilter,['LotArea']]  = Q3 + 1.5 *IQR
 dt.loc[lowerFilter,['LotArea']]  = Q1 - 1.5 *IQR
 
+dt = dt[dt['Id'] != 2121]
+dt = dt[dt['Id'] != 2189]
+dt = dt[dt['Id'] != 2577]
+
+
+#SS.cvs----------------------------------------------------------------------------
+ss = ss[ss['Id'] != 2121]
+ss = ss[ss['Id'] != 2189]
+ss = ss[ss['Id'] != 2577]
 
 
 #Scaleris----------------------------------------------------------------------------------
-
-# X = df.drop(columns=['SalePrice'])
-# y = df['SalePrice']
 
 X_train = df.drop('SalePrice', axis=1)
 y_train = df['SalePrice']
@@ -115,35 +131,27 @@ y_train = df['SalePrice']
 X_test = dt
 y_test = ss['SalePrice']
 
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 #KNN skaiciuojam----------------------------------------------------------------------------------
-
-from sklearn.model_selection import cross_val_score
-import numpy as np
-
 k_values = range(1, 31)
-cv_score = []
+cv_scores = []
 
-rmse_scorer = make_scorer(mean_squared_error, squared=False)
+rmse_scorer = make_scorer(root_mean_squared_error)
 
 for k in k_values:
     knn = KNeighborsRegressor(n_neighbors=k)
     scores = cross_val_score(knn, X_train, y_train, cv=10, scoring=rmse_scorer)
-    cv_score.append(scores.mean())
+    cv_scores.append(scores.mean())
 
-best_k = k_values[np.argmin(cv_score)]
+best_k = k_values[np.argmin(cv_scores)]
 print(f"Best k value: {best_k}")
 
-# sns.lineplot(x = k_values, y = cv_score)
-# plt.show()
-
-
 #SVR-----------------------------
+
+dt.to_csv('kasciadarosi.csv', index=False)
 
 from sklearn.svm import SVR
 
@@ -152,29 +160,24 @@ svr.fit(X_train, y_train)
 
 y_pred = svr.predict(X_test)
 
+#-Tree-----------------------------------------------
 
+from sklearn.tree import DecisionTreeRegressor
 
-
-sns.histplot(x=X_test, y=y_pred)
-plt.show()
-
-
-
-
-
-
-
+# tree = DecisionTreeRegressor(random_state=11)
+# tree.fit(X_train, y_train)
+# y_pred = tree.predict(X_test)
 
 #-Acuracy---------------------------------------------------------------------------------
-from sklearn.ensemble import RandomForestRegressor
 
-rf = RandomForestRegressor(n_estimators=best_k, random_state=42)
-rf.fit(X_train, y_train)
+rf = RandomForestRegressor(n_estimators=best_k, random_state=11)
+# rf.fit(X_train, y_train)
 
-y_pred_rf = rf.predict(X_test)
+# y_pred_rf = rf.predict(X_test)
 
-rmse_rf = mean_squared_error(y_test, y_pred_rf, squared=False)
+rmse_rf = mse(y_test, y_pred, squared=False)
+
 print(f'Random Forest RMSE: {rmse_rf:.2f}')
 
-r2 = r2_score(y_test, y_pred_rf)
+r2 = r2_score(y_test, y_pred)
 print(f'R² Score: {r2:.2f}')
