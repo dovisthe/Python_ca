@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Update</h1>
+
+<form action="/masina/update/{{masina.id}}" method="post">
+    <div class="mb-3">
+        <label for="vardas" class="form-label">naujas auto pavadinimas</label>
+        <input type="text" class="form-control" id="vardas" name="vardas" value="{{masina.name}}">
+    </div>
+    <button type="submit" class="btn btn-primary">Atnaujinti</button>
+    <div class="row">
+        <div class="col-2">
+            <a class="btn btn-primary" href="/masina" role="button">Gryžti</a>
+        </div>
+</form>
+
+{% endblock %}

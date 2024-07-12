@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Masinos</h1>
+
+<a class="btn btn-primary" href="masina/create" role="button">Create</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Savininko ID</th>
+            <th scope="col">Veiksmai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for masina in sarasas %}
+        <tr>
+            <th scope="row">{{masina.id}}</th>
+            <td>{{masina.name}}</td>
+            <td>{{masina.vartotojas_id}}</td>
+            <td>
+                <a class="btn btn-primary" href="masina/update/{{masina.id}}" role="button">Update</a>
+                <a class="btn btn-danger" href="masina/delete/{{masina.id}}" role="button">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

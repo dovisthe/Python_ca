@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Labas, pasauli!</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Labas, pasauli!</h1>
+        <p>This is a sample page with some interesting content.</p>
+        
+        <h2>Even Numbers:</h2>
+        {% for number in range(10) %}
+            {% if number % 2 == 0 %}
+                <p>{{ number }} - lyginis</p>
+            {% endif %}
+        {% endfor %}
+        
+    </div>
+</body>
+</html>

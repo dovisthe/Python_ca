@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>prideti masina</h1>
+
+<form action="/vartotojas/add_car/{{vartotojas_id}}" method="post">
+    <div class="mb-3">
+        <label for="masina_id" class="form-label">Masinos id</label>
+        <input type="text" class="form-control" id="vardas_id" name="masina_id">
+    </div>
+    <button type="submit" class="btn btn-primary">prideti</button>
+    <div class="row">
+        <div class="col-2">
+            <a class="btn btn-primary" href="/vartotojas" role="button">Gryžti</a>
+        </div>
+</form>
+
+{% endblock %}

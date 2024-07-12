@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Labas</h1>
+
+<form action="/patikrinimas" method="post">
+
+    <div class="mb-3">
+        <label for="year" class="form-label">Year</label>
+        <input type="number" class="form-control" id="year" name="year">
+    </div>
+    <button type="submit" class="btn btn-primary">patikrinti</button>
+</form>
+
+{% endblock %}

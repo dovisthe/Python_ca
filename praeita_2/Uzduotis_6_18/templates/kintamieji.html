@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<h1>Leap Years from {{ start_year }} to {{ end_year }}</h1>
+<ul>
+    {% for year in leap_years %}
+        <li>{{ year }}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Vartotojai</h1>
+
+<a class="btn btn-primary" href="vartotojas/create" role="button">Create</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+            <th scope="col">Veiksmai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vartotojas in sarasas %}
+        <tr>
+            <th scope="row">{{vartotojas.id}}</th>
+            <td>{{vartotojas.name}}</td>
+            <td>{{vartotojas.vartotojas_id}}</td>
+            <td>
+                <a class="btn btn-primary" href="vartotojas/update/{{vartotojas.id}}" role="button">Update</a>
+                <a class="btn btn-danger" href="vartotojas/delete/{{vartotojas.id}}" role="button">Delete</a>
+                <a class="btn btn-primary" href="vartotojas/add_car/{{vartotojas.id}}" role="button">Add Car</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>sukurk masina</h1>
+
+<form action="/masina/create" method="post">
+
+    <div class="mb-3">
+        <label for="vardas" class="form-label">pavadinimas</label>
+        <input type="text" class="form-control" id="masina" name="masina">
+    </div>
+    <button type="submit" class="btn btn-primary">Sukurti</button>
+    <div class="row">
+        <div class="col-2">
+            <a class="btn btn-primary" href="/masina" role="button">Gryžti</a>
+        </div>
+</form>
+
+{% endblock %}
