@@ -34,7 +34,11 @@ df = df.drop(columns=['Street', 'Alley', 'Utilities', 'LandSlope', 'Condition2',
                       'GarageYrBlt', 'GarageQual', 'GarageCond', 'PavedDrive', '3SsnPorch',
                       'ScreenPorch', 'PoolQC', 'MiscFeature', 'MiscVal', 'Neighborhood',
                       'MSZoning', 'LotShape', 'LandContour', 'Condition1', 'BldgType',
-                      'RoofStyle', 'Exterior1st', 'Exterior2nd', 'HouseStyle'
+                      'RoofStyle', 'Exterior1st', 'Exterior2nd', 'HouseStyle', 'SaleCondition',
+                      'SaleType', 'GarageType', 'BsmtFinType1', 'ExterCond', 'BsmtExposure',
+                      'BsmtFinType2', 'HeatingQC',
+                      '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'PoolArea',
+                      'MoSold', 'YrSold'
                       ])
 
 
@@ -76,7 +80,11 @@ dt = dt.drop(columns=['Street', 'Alley', 'Utilities', 'LandSlope', 'Condition2',
                       'GarageYrBlt', 'GarageQual', 'GarageCond', 'PavedDrive', '3SsnPorch',
                       'ScreenPorch', 'PoolQC', 'MiscFeature', 'MiscVal', 'Neighborhood',
                       'MSZoning', 'LotShape', 'LandContour', 'Condition1', 'BldgType',
-                      'RoofStyle', 'Exterior1st', 'Exterior2nd', 'HouseStyle'
+                      'RoofStyle', 'Exterior1st', 'Exterior2nd', 'HouseStyle', 'SaleCondition',
+                      'SaleType', 'GarageType', 'BsmtFinType1', 'ExterCond', 'BsmtExposure',
+                      'BsmtFinType2', 'HeatingQC',
+                      '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'PoolArea',
+                      'MoSold', 'YrSold'
                       ])
 
 
@@ -131,15 +139,21 @@ y_train = df['SalePrice']
 X_test = dt
 y_test = ss['SalePrice']
 
+
+
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
+
 #KNN skaiciuojam----------------------------------------------------------------------------------
+def root_mean_squared_error(y_true, y_pred):
+    return np.sqrt(mean_squared_error(y_true, y_pred))
+
 k_values = range(1, 31)
 cv_scores = []
 
-rmse_scorer = make_scorer(root_mean_squared_error)
+rmse_scorer = make_scorer(root_mean_squared_error, greater_is_better=False)
 
 for k in k_values:
     knn = KNeighborsRegressor(n_neighbors=k)
@@ -149,35 +163,63 @@ for k in k_values:
 best_k = k_values[np.argmin(cv_scores)]
 print(f"Best k value: {best_k}")
 
+knn_best = KNeighborsRegressor(n_neighbors=best_k)
+knn_best.fit(X_train, y_train)
+y_pred_knn = knn_best.predict(X_test)
+
 #SVR-----------------------------
 
 dt.to_csv('kasciadarosi.csv', index=False)
 
 from sklearn.svm import SVR
 
-svr = SVR(kernel='rbf')
+svr = SVR(kernel='rbf', C=23.0)
 svr.fit(X_train, y_train)
 
 y_pred = svr.predict(X_test)
+y_pred_svr = y_pred
 
 #-Tree-----------------------------------------------
 
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import DecisionTreeClassifier
 
-# tree = DecisionTreeRegressor(random_state=11)
-# tree.fit(X_train, y_train)
-# y_pred = tree.predict(X_test)
+tree = DecisionTreeClassifier(max_depth=3, min_samples_split=4, min_samples_leaf=2)
+tree.fit(X_train, y_train)
+y_pred_tree = tree.predict(X_test)
+
 
 #-Acuracy---------------------------------------------------------------------------------
 
-rf = RandomForestRegressor(n_estimators=best_k, random_state=11)
-# rf.fit(X_train, y_train)
-
-# y_pred_rf = rf.predict(X_test)
 
 rmse_rf = mse(y_test, y_pred, squared=False)
 
-print(f'Random Forest RMSE: {rmse_rf:.2f}')
+print(f'RMSE: {rmse_rf:.2f}')
 
-r2 = r2_score(y_test, y_pred)
-print(f'R² Score: {r2:.2f}')
+
+# Plotting the graphs
+fig, axs = plt.subplots(1, 3, figsize=(18, 6))
+
+# KNN plot
+axs[0].scatter(y_test, y_pred_knn, alpha=0.5)
+axs[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
+axs[0].set_xlabel('Actual Price')
+axs[0].set_ylabel('Predicted Price')
+axs[0].set_title('Actual Price vs. Predicted Price (KNN)')
+
+# SVR plot
+axs[1].scatter(y_test, y_pred_svr, alpha=0.5)
+axs[1].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
+axs[1].set_xlabel('Actual Price')
+axs[1].set_ylabel('Predicted Price')
+axs[1].set_title('Actual Price vs. Predicted Price (SVR)')
+
+# Decision Tree plot
+axs[2].scatter(y_test, y_pred_tree, alpha=0.5)
+axs[2].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
+axs[2].set_xlabel('Actual Price')
+axs[2].set_ylabel('Predicted Price')
+axs[2].set_title('Actual Price vs. Predicted Price (Decision Tree)')
+
+plt.tight_layout()
+plt.show()
+
