@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor, AdaBoostRegressor
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import mean_squared_error, r2_score, make_scorer
 from xgboost import XGBRegressor
@@ -26,7 +26,7 @@ df = df.drop('timestamp', axis=1)
 
 x = df.drop('cnt', axis=1)
 y = df['cnt']
-
+# print(df.head(60))
 # sns.catplot(y=df['cnt'])
 # plt.show()
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25,random_state=42)
@@ -54,13 +54,11 @@ print(f"Mean Squared Error: {mse_rfr:.4f}")
 print(f"R-squared Score: {green_color}{r2_rfr:.4f}{reset_color}")
 
 
-
-
 ################################################################## GradientBoostingRegressor
 print('-'*181)
 print('-'*77, 'GradientBoostingRegressor','-'*77)
 
-gb_regressor = GradientBoostingRegressor(n_estimators=120, learning_rate=0.1, max_depth=3,random_state=42)
+gb_regressor = GradientBoostingRegressor(n_estimators=120,min_samples_split= 4,min_samples_leaf= 15, learning_rate=0.1, max_depth=15,random_state=42)
 gb_regressor.fit(X_train_scaled, y_train)
 y_pred_gb = gb_regressor.predict(X_test_scaled)
 
@@ -74,7 +72,7 @@ print(f"R-squared Score GB: {green_color}{r2GB:.3f}{reset_color}")
 
 ################################################################## XGBRegressor
 print('-'*181)
-print('-'*83, 'XGBRegressor','-'*83)
+print('-'*83, 'XGBRegressor ','-'*83)
 
 # xgbr = XGBRegressor(
 #     random_state=42,
@@ -116,6 +114,53 @@ print(f"RMSE XGB: {rmse_XGB:.4f}")
 print("XGBBoost MSE:", XGB_mse)
 print(f"XGBBoost R2 Score: {green_color}{XGB_r2:.3f}{reset_color}")
 
-print("-"*181)
-print('-'*83, 'Padarytos isvados','-'*83)
-print()
+################################# Grafikai
+
+df_pred = pd.DataFrame({'year': x_test['year'],
+                        'month': x_test['month'],
+                        'hour': x_test['hour'],
+                        'cnt': y_pred_XGB}
+                        )
+
+
+plt.figure(figsize=(15, 6))
+plt.subplot(1, 2, 1)
+sns.barplot(data=df, x='hour', y='cnt')
+plt.title('Rented by hour Actual')
+plt.xlabel('Hour')
+plt.ylabel('cnt')
+# plt.show()
+
+plt.subplot(1, 2, 2)
+sns.barplot(data=df_pred, x='hour', y='cnt')
+plt.title('Rented bikes by hour XGBoost Predicted')
+plt.xlabel('Hour')
+plt.ylabel('cnt')
+plt.tight_layout()
+plt.show()
+
+
+plt.figure(figsize=(14, 6))
+# Random Forest plot
+plt.subplot(1, 2, 1)
+plt.scatter(y_test, y_pred_gb, color='blue', alpha=0.5)
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
+plt.xlabel('Faktinis cnt')
+plt.ylabel('Prognozuotas cnt')
+plt.title('gb Prognozės')
+
+# XGBoost plot 
+plt.subplot(1, 2, 2)
+plt.scatter(y_test, y_pred_XGB, color='green', alpha=0.5)
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')
+plt.xlabel('Faktinis Cnt')
+plt.ylabel('Prognozuotas cnt')
+plt.title('XGBoost Prognozės')
+
+plt.tight_layout()
+plt.show()
+
+# print("-"*181)
+# print('-'*81, 'Padarytos isvados','-'*81)
+# print()
+
